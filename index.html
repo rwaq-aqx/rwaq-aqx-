@@ -3,24 +3,21 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0b1220">
-  <title>AQX Central Admin | تسجيل الدخول</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>AQX | لوحة الإدارة المركزية</title>
 
   <style>
     :root {
-      color-scheme: dark;
-      --bg: #080e1a;
-      --panel: #111b2d;
-      --border: rgba(148, 163, 184, .18);
-      --muted: #94a3b8;
-      --accent: #38bdf8;
+      --bg: #0b1120;
+      --panel: #121c2e;
+      --panel2: #18243a;
+      --border: #2b3b54;
+      --text: #edf3ff;
+      --muted: #9aacc5;
+      --accent: #64d9b2;
+      --danger: #ff7777;
+      --blue: #7db5ff;
     }
 
     * { box-sizing: border-box; }
@@ -28,942 +25,784 @@
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: "Cairo", sans-serif;
-      color: #f8fafc;
       background:
-        radial-gradient(ellipse at 10% 5%, rgba(14,165,233,.13), transparent 38%),
-        radial-gradient(ellipse at 90% 90%, rgba(99,102,241,.12), transparent 35%),
+        radial-gradient(ellipse at top, #1b3150 0, transparent 55%),
         var(--bg);
+      color: var(--text);
+      font-family: Tahoma, Arial, sans-serif;
     }
 
     button, input { font: inherit; }
 
-    .panel {
-      background: rgba(17, 27, 45, .94);
+    .container {
+      width: min(100% - 28px, 1050px);
+      margin: 0 auto;
+      padding: 30px 0;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 26px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      background: linear-gradient(135deg, #64d9b2, #4d91ff);
+      color: #07131e;
+      font-weight: 900;
+      font-size: 18px;
+    }
+
+    h1 { font-size: 22px; margin: 0 0 6px; }
+    h2 { font-size: 19px; margin-top: 0; }
+    p { line-height: 1.8; }
+    .muted { color: var(--muted); }
+    .small { font-size: 12px; }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
       border: 1px solid var(--border);
-      border-radius: 22px;
-      box-shadow: 0 24px 80px rgba(0,0,0,.28);
-      backdrop-filter: blur(14px);
+      border-radius: 30px;
+      color: var(--muted);
+      font-size: 12px;
     }
 
-    .field {
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #8290a5;
+    }
+
+    .dot.online { background: var(--accent); }
+    .dot.error { background: var(--danger); }
+
+    .panel {
+      background: rgba(18, 28, 46, .96);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 18px 55px #0003;
+    }
+
+    .login-wrap {
+      max-width: 460px;
+      margin: 36px auto;
+    }
+
+    .field { margin: 18px 0; }
+
+    label {
+      display: block;
+      margin-bottom: 9px;
+      font-size: 13px;
+      color: #d7e4f8;
+    }
+
+    input {
       width: 100%;
-      border: 1px solid #334155;
-      background: #0b1424;
-      color: #f8fafc;
-      border-radius: 12px;
-      padding: 13px 14px;
+      padding: 14px;
+      background: #0c1525;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 11px;
       outline: none;
-      transition: border-color .2s, box-shadow .2s;
     }
 
-    .field:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(56,189,248,.12);
-    }
+    input:focus { border-color: var(--accent); }
 
-    .primary-btn {
-      background: linear-gradient(110deg, #0284c7, #2563eb);
-      border: 1px solid rgba(125,211,252,.25);
-      transition: opacity .2s, transform .2s;
-    }
-
-    .primary-btn:hover:not(:disabled) {
-      transform: translateY(-1px);
+    button {
+      cursor: pointer;
+      border: 0;
+      border-radius: 11px;
+      padding: 13px 17px;
+      font-weight: 700;
+      transition: .15s ease;
     }
 
     button:disabled {
       opacity: .55;
-      cursor: not-allowed;
+      cursor: wait;
     }
 
-    .notice {
+    .primary {
+      width: 100%;
+      background: var(--accent);
+      color: #071b19;
+    }
+
+    .primary:hover { filter: brightness(1.08); }
+
+    .secondary {
+      background: var(--panel2);
+      color: var(--text);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 11px 13px;
+    }
+
+    .danger {
+      background: #46232c;
+      color: #ffdce0;
+      border: 1px solid #733943;
+    }
+
+    .message {
+      display: none;
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 10px;
       font-size: 13px;
       line-height: 1.8;
+      overflow-wrap: anywhere;
     }
 
-    .notice-error {
-      color: #fecaca;
-      background: rgba(127,29,29,.2);
-      border-color: rgba(248,113,113,.25);
+    .message.show { display: block; }
+    .message.info { background: #1a3047; color: #c6e2ff; }
+    .message.success { background: #14372f; color: #a9f5d9; }
+    .message.error { background: #40232c; color: #ffc2c9; }
+
+    .hidden { display: none !important; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin: 22px 0;
     }
 
-    .notice-info {
-      color: #bae6fd;
-      background: rgba(3,105,161,.14);
-      border-color: rgba(56,189,248,.22);
-    }
-
-    .notice-success {
-      color: #bbf7d0;
-      background: rgba(21,128,61,.14);
-      border-color: rgba(74,222,128,.22);
-    }
-
-    .status-dot {
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #64748b;
-      margin-left: 6px;
-    }
-
-    .status-online { background: #4ade80; }
-    .status-warning { background: #fbbf24; }
-    .status-offline { background: #f87171; }
-
-    .info-card {
+    .stat {
+      background: var(--panel2);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 14px;
-      background: rgba(15,23,42,.55);
+      border-radius: 15px;
+      padding: 18px;
       min-width: 0;
     }
 
-    .info-value {
+    .stat .value {
+      display: block;
+      font-size: 17px;
+      font-weight: bold;
+      margin-top: 12px;
       overflow-wrap: anywhere;
-      word-break: break-word;
     }
 
-    .spinner {
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255,255,255,.35);
-      border-top-color: white;
-      border-radius: 50%;
-      display: inline-block;
-      animation: spin .7s linear infinite;
-      vertical-align: middle;
+    .stat .label {
+      color: var(--muted);
+      font-size: 12px;
     }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
-    [hidden] { display: none !important; }
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .actions button { flex: 1; min-width: 130px; }
+
+    .security-note {
+      border-right: 3px solid var(--blue);
+      padding: 10px 13px;
+      background: #17263b;
+      color: #cfddf2;
+      font-size: 12px;
+      line-height: 1.9;
+      margin-top: 20px;
+      border-radius: 8px;
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 24px;
+    }
+
+    @media (max-width: 650px) {
+      .container { width: min(100% - 20px, 1050px); padding-top: 20px; }
+      .header { align-items: flex-start; flex-direction: column; }
+      .panel { padding: 18px; }
+      .grid { grid-template-columns: 1fr; }
+      .login-wrap { margin-top: 18px; }
+    }
   </style>
 </head>
 
 <body>
-  <main class="min-h-screen flex items-center justify-center p-4 py-10">
-    <div class="w-full max-w-2xl">
+  <main class="container">
+    <header class="header">
+      <div class="brand">
+        <div class="logo">AQX</div>
+        <div>
+          <h1>AQX Central Admin</h1>
+          <div class="muted small">منظومة الإدارة المركزية</div>
+        </div>
+      </div>
 
-      <!-- Header -->
-      <header class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl border border-sky-400/20 bg-sky-400/10 mb-4">
-          <span class="text-2xl font-extrabold text-sky-300">AQX</span>
+      <div class="status">
+        <span id="statusDot" class="dot"></span>
+        <span id="statusText">لم يتم التحقق من الجلسة</span>
+      </div>
+    </header>
+
+    <!-- تسجيل الدخول -->
+    <section id="loginSection" class="login-wrap panel">
+      <h2>تسجيل دخول الإدارة</h2>
+      <p class="muted small">
+        استخدم بيانات حساب الإدارة المسجل في نظام AQX.
+      </p>
+
+      <form id="loginForm" autocomplete="on">
+        <div class="field">
+          <label for="email">البريد الإلكتروني</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autocomplete="username"
+            required
+            maxlength="254"
+            placeholder="admin@example.com">
         </div>
 
-        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-wide">
-          AQX Central Admin
-        </h1>
-
-        <p class="text-slate-400 text-sm mt-2">
-          بوابة الإدارة المركزية لمنظومة ALQURMANI X
-        </p>
-
-        <div class="flex items-center justify-center gap-2 mt-4 text-xs text-slate-400">
-          <span id="connection-dot" class="status-dot"></span>
-          <span id="connection-label">في انتظار الاتصال</span>
-        </div>
-      </header>
-
-      <!-- Login -->
-      <section id="login-container" class="panel p-6 sm:p-8">
-        <div class="mb-6">
-          <h2 class="text-xl font-bold">تسجيل دخول المسؤول</h2>
-          <p class="text-sm text-slate-400 mt-2">
-            أدخل بيانات حساب الإدارة المعتمد.
-          </p>
+        <div class="field">
+          <label for="password">كلمة المرور</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            required
+            maxlength="256"
+            placeholder="أدخل كلمة المرور">
         </div>
 
-        <div id="error-alert" class="notice mb-5" role="alert" aria-live="polite" hidden></div>
+        <button id="loginButton" class="primary" type="submit">
+          تسجيل الدخول
+        </button>
+      </form>
 
-        <form id="login-form" autocomplete="on">
-          <div class="mb-4">
-            <label for="email" class="block text-sm text-slate-300 mb-2">
-              البريد الإلكتروني
-            </label>
-            <input
-              id="email"
-              name="email"
-              class="field"
-              type="email"
-              placeholder="admin@example.com"
-              autocomplete="username"
-              inputmode="email"
-              maxlength="254"
-              required
-            >
-          </div>
+      <div id="loginMessage" class="message" role="status" aria-live="polite"></div>
 
-          <div class="mb-6">
-            <label for="password" class="block text-sm text-slate-300 mb-2">
-              كلمة المرور
-            </label>
-            <input
-              id="password"
-              name="password"
-              class="field"
-              type="password"
-              placeholder="أدخل كلمة المرور"
-              autocomplete="current-password"
-              required
-            >
-          </div>
+      <div class="security-note">
+        الدخول مخصص للحسابات التي يسمح بها محرك الإدارة.
+        لا تشارك كلمة المرور أو رمز الجلسة مع أي شخص.
+      </div>
+    </section>
 
-          <button
-            id="submit-btn"
-            type="submit"
-            class="primary-btn w-full rounded-xl py-3 font-bold"
-          >
-            تسجيل الدخول
-          </button>
-        </form>
-
-        <p class="text-xs text-slate-500 text-center mt-6 leading-6">
-          الوصول مخصص لحسابات الإدارة المصرح بها فقط.
-          لا تشارك بيانات الدخول أو رمز الجلسة مع أي شخص.
-        </p>
-      </section>
-
-      <!-- Dashboard -->
-      <section id="dashboard-container" class="panel p-6 sm:p-8" hidden>
-        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-7">
+    <!-- لوحة الإدارة -->
+    <section id="dashboardSection" class="hidden">
+      <div class="panel">
+        <div class="section-head">
           <div>
-            <div class="text-sm text-slate-400 mb-1">لوحة التحكم</div>
-            <h2 class="text-2xl font-extrabold">مرحبًا بك</h2>
-            <p class="text-sm text-slate-400 mt-2">
-              تم فتح الواجهة. صلاحية الوصول الفعلية يحددها الخادم.
-            </p>
+            <h2>لوحة التحكم</h2>
+            <div id="welcomeText" class="muted small">
+              جارٍ تحميل بيانات الحساب...
+            </div>
           </div>
-
-          <span id="status-badge" class="inline-flex items-center rounded-full px-3 py-2 text-xs bg-slate-700 text-slate-200 w-fit">
-            <span class="status-dot"></span>
-            جارٍ التحقق
-          </span>
-        </div>
-
-        <div id="dashboard-alert" class="notice mb-5" role="status" aria-live="polite" hidden></div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div class="info-card">
-            <div class="text-xs text-slate-400 mb-2">معرف المسؤول</div>
-            <div id="profile-admin-id" class="info-value font-semibold text-sm">—</div>
-          </div>
-
-          <div class="info-card">
-            <div class="text-xs text-slate-400 mb-2">البريد الإلكتروني</div>
-            <div id="profile-email" class="info-value font-semibold text-sm">—</div>
-          </div>
-
-          <div class="info-card">
-            <div class="text-xs text-slate-400 mb-2">اسم المستخدم</div>
-            <div id="profile-username" class="info-value font-semibold text-sm">—</div>
-          </div>
-
-          <div class="info-card">
-            <div class="text-xs text-slate-400 mb-2">الصلاحية</div>
-            <div id="profile-role" class="info-value font-semibold text-sm">—</div>
-          </div>
-        </div>
-
-        <div class="mt-5 rounded-xl border border-slate-700/70 bg-slate-950/40 p-4">
-          <div class="flex items-center justify-between gap-4">
-            <span class="text-sm text-slate-300">مؤقت الخمول المحلي</span>
-            <span id="idle-timer" class="font-bold text-sky-300 tabular-nums" dir="ltr">30:00</span>
-          </div>
-
-          <div class="w-full h-1.5 rounded-full bg-slate-800 mt-3 overflow-hidden">
-            <div id="idle-progress" class="h-full rounded-full bg-sky-400 transition-all" style="width:100%"></div>
-          </div>
-
-          <p class="text-xs text-slate-500 mt-3 leading-6">
-            هذا المؤقت للتنبيه فقط. الخادم هو المرجع النهائي لصلاحية الجلسة.
-          </p>
-        </div>
-
-        <div class="flex flex-col sm:flex-row gap-3 mt-6">
-          <button id="refresh-btn" type="button" class="flex-1 rounded-xl border border-slate-600 py-3 font-semibold hover:bg-slate-800">
-            تحديث بياناتي
-          </button>
-
-          <button id="logout-btn" type="button" class="flex-1 rounded-xl border border-red-400/30 bg-red-500/10 text-red-200 py-3 font-semibold hover:bg-red-500/20">
+          <button id="logoutButton" class="danger" type="button">
             تسجيل الخروج
           </button>
         </div>
-      </section>
 
-      <footer class="text-center text-xs text-slate-600 mt-6">
-        ALQURMANI X · AQX Central Admin
-      </footer>
-    </div>
+        <div class="grid">
+          <div class="stat">
+            <span class="label">اسم المستخدم</span>
+            <span id="profileUsername" class="value">—</span>
+          </div>
+
+          <div class="stat">
+            <span class="label">الدور الإداري</span>
+            <span id="profileRole" class="value">—</span>
+          </div>
+
+          <div class="stat">
+            <span class="label">حالة الجلسة</span>
+            <span id="sessionState" class="value">جارٍ التحقق</span>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <div>
+            <h2>إدارة الجلسة</h2>
+            <p class="muted small">
+              تنتهي الجلسة محليًا بعد 30 دقيقة من عدم النشاط.
+              ويظل المحرك هو المرجع النهائي لصلاحية الجلسة.
+            </p>
+          </div>
+          <div class="status">
+            <span class="dot online"></span>
+            <span>الوقت المتبقي محليًا</span>
+            <strong id="idleCountdown">30:00</strong>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="refreshButton" class="secondary" type="button">
+            تحديث بيانات الحساب
+          </button>
+          <button id="checkSessionButton" class="secondary" type="button">
+            التحقق من الجلسة
+          </button>
+        </div>
+
+        <div id="dashboardMessage" class="message" role="status" aria-live="polite"></div>
+
+        <div class="security-note">
+          هذه الواجهة هي نقطة دخول للوحة الإدارة فقط. لا تمنح نفسها صلاحيات
+          إدارية؛ يجب أن يتحقق المحرك من الحساب والدور والجلسة عند كل عملية
+          محمية. لا تضف روابط للوحات أخرى قبل ربطها بواجهات تحقق مستقلة.
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      ALQURMANI X · AQX Central Administration
+    </footer>
   </main>
 
   <script>
     "use strict";
 
-    // عنوان محرك Google Apps Script الحالي
+    // رابط المحرك الجديد الذي أرسله المستخدم.
     const API_URL =
-      "https://script.google.com/macros/s/AKfycbyTEeH03GJw0RPzvNSveTjwXGCMI82WyEwIsBv6EvOZqgbmgQKwMr8sSioovSsPBq8n9Q/exec";
-
-    const SESSION_KEY = "aqx_session_token";
-    const DEVICE_KEY = "aqx_admin_device_id";
+      "https://script.google.com/macros/s/AKfycbxbKqBasNkgIY16PeuinceStHclEAYmhVHTrKtRMXgneJv1r2KecpRTwMhpcOMW0Hw/exec";
 
     const IDLE_LIMIT_MS = 30 * 60 * 1000;
-    const VERIFY_INTERVAL_MS = 2 * 60 * 1000;
-    const REQUEST_TIMEOUT_MS = 20000;
+    const VERIFY_INTERVAL_MS = 60 * 1000;
 
-    const $ = (id) => document.getElementById(id);
+    const STORAGE_TOKEN = "aqx_session_token";
+    const STORAGE_DEVICE = "aqx_admin_device_id";
 
-    let sessionToken = null;
-    let lastActivityAt = Date.now();
-    let lastVerifiedAt = 0;
-    let verifyInProgress = false;
-    let loginInProgress = false;
+    let sessionToken = "";
+    let deviceId = "";
+    let lastActivity = Date.now();
+    let countdownTimer = null;
+    let verifyTimer = null;
+    let requestInProgress = false;
     let logoutInProgress = false;
-    let countdownInterval = null;
-    let activityHandlerTimer = null;
 
-    function setText(id, value) {
-      $(id).textContent =
-        value === undefined || value === null || value === ""
-          ? "—"
-          : String(value);
-    }
+    const $ = id => document.getElementById(id);
 
-    function showNotice(id, message, type = "info") {
-      const element = $(id);
+    function showMessage(elementId, message, type = "info") {
+      const element = $(elementId);
       element.textContent = message;
-      element.className = "notice mb-5 " +
-        (type === "error"
-          ? "notice-error"
-          : type === "success"
-            ? "notice-success"
-            : "notice-info");
-      element.hidden = false;
+      element.className = "message show " + type;
     }
 
-    function hideNotice(id) {
-      $(id).hidden = true;
-      $(id).textContent = "";
+    function clearMessage(elementId) {
+      const element = $(elementId);
+      element.textContent = "";
+      element.className = "message";
     }
 
-    function setConnection(state, label) {
-      const dot = $("connection-dot");
-      dot.className = "status-dot";
-
-      if (state === "online") dot.classList.add("status-online");
-      if (state === "warning") dot.classList.add("status-warning");
-      if (state === "offline") dot.classList.add("status-offline");
-
-      setText("connection-label", label);
-    }
-
-    function setStatusBadge(label, state = "normal") {
-      const badge = $("status-badge");
-      badge.className =
-        "inline-flex items-center rounded-full px-3 py-2 text-xs w-fit ";
-
-      if (state === "online") {
-        badge.classList.add("bg-green-500/10", "text-green-300");
-      } else if (state === "warning") {
-        badge.classList.add("bg-amber-500/10", "text-amber-200");
-      } else if (state === "error") {
-        badge.classList.add("bg-red-500/10", "text-red-200");
-      } else {
-        badge.classList.add("bg-slate-700", "text-slate-200");
-      }
-
-      badge.replaceChildren();
-
-      const dot = document.createElement("span");
-      dot.className = "status-dot";
-
-      if (state === "online") dot.classList.add("status-online");
-      if (state === "warning") dot.classList.add("status-warning");
-      if (state === "error") dot.classList.add("status-offline");
-
-      badge.append(dot, document.createTextNode(label));
+    function setStatus(message, state = "") {
+      $("statusText").textContent = message;
+      $("statusDot").className = "dot" + (state ? " " + state : "");
     }
 
     function getDeviceId() {
+      // معرف مساعد للعميل وليس إثباتًا أمنيًا لهوية الجهاز.
       try {
-        let deviceId = localStorage.getItem(DEVICE_KEY);
-
-        if (!deviceId) {
-          if (window.crypto && typeof crypto.randomUUID === "function") {
-            deviceId = crypto.randomUUID();
-          } else {
-            const bytes = new Uint8Array(24);
-            crypto.getRandomValues(bytes);
-            deviceId = Array.from(bytes)
-              .map((b) => b.toString(16).padStart(2, "0"))
-              .join("");
-          }
-
-          localStorage.setItem(DEVICE_KEY, deviceId);
+        let id = localStorage.getItem(STORAGE_DEVICE);
+        if (!id) {
+          id = "aqx-" + createRandomId();
+          localStorage.setItem(STORAGE_DEVICE, id);
         }
-
-        return deviceId;
-      } catch (error) {
-        // لا نوقف تسجيل الدخول بسبب تعذر تخزين معرف الجهاز.
-        // الخادم يجب ألا يعتبر هذا المعرف إثباتًا للهوية.
-        return "temporary-" + createRandomId();
+        return id;
+      } catch (_) {
+        throw new Error(
+          "تعذر حفظ معرف الجهاز في المتصفح. تحقق من إعدادات الخصوصية."
+        );
       }
     }
 
     function createRandomId() {
-      const bytes = new Uint8Array(16);
+      if (window.crypto && crypto.randomUUID) {
+        return crypto.randomUUID();
+      }
+
+      const bytes = new Uint8Array(24);
       crypto.getRandomValues(bytes);
-      return Array.from(bytes)
-        .map((b) => b.toString(16).padStart(2, "0"))
-        .join("");
+      return Array.from(bytes, b => b.toString(16).padStart(2, "0")).join("");
     }
 
-    function saveSession(token) {
+    function saveToken(token) {
       sessionToken = token;
-
       try {
-        if (token) {
-          localStorage.setItem(SESSION_KEY, token);
-        } else {
-          localStorage.removeItem(SESSION_KEY);
-        }
-      } catch (error) {
-        // إذا تعذر التخزين، تظل الجلسة متاحة في الذاكرة الحالية فقط.
+        localStorage.setItem(STORAGE_TOKEN, token);
+      } catch (_) {
+        sessionToken = "";
+        throw new Error("تعذر حفظ الجلسة في المتصفح.");
       }
     }
 
-    function loadSession() {
+    function loadToken() {
       try {
-        return localStorage.getItem(SESSION_KEY);
-      } catch (error) {
-        return null;
+        return localStorage.getItem(STORAGE_TOKEN) || "";
+      } catch (_) {
+        return "";
       }
     }
 
-    function clearSessionLocal() {
-      sessionToken = null;
-
+    function clearToken() {
+      sessionToken = "";
       try {
-        localStorage.removeItem(SESSION_KEY);
-      } catch (error) {
-        // لا شيء.
-      }
-
-      lastVerifiedAt = 0;
-      stopCountdown();
+        localStorage.removeItem(STORAGE_TOKEN);
+      } catch (_) {}
     }
 
-    async function apiRequest(action, extra = {}) {
-      const controller = new AbortController();
-      const timeout = setTimeout(
-        () => controller.abort(),
-        REQUEST_TIMEOUT_MS
-      );
+    /*
+     * إرسال JSON داخل text/plain لتجنب طلب CORS التمهيدي OPTIONS.
+     * يجب أن يقرأ doPost في المحرك e.postData.contents.
+     */
+    async function api(action, extra = {}) {
+      const payload = {
+        action,
+        ...extra
+      };
+
+      let response;
 
       try {
-        const response = await fetch(API_URL, {
+        response = await fetch(API_URL, {
           method: "POST",
-          // ترك Content-Type دون تحديد مقصود لتقليل احتمال preflight.
-          // هذا لا يضمن تجاوز قيود CORS في جميع الاستضافات.
-          body: JSON.stringify({
-            action,
-            ...extra
-          }),
+          headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+          },
+          body: JSON.stringify(payload),
           redirect: "follow",
-          signal: controller.signal
+          cache: "no-store",
+          credentials: "omit"
         });
-
-        if (!response.ok) {
-          throw new Error("HTTP_" + response.status);
-        }
-
-        const raw = await response.text();
-
-        let data;
-        try {
-          data = JSON.parse(raw);
-        } catch (error) {
-          throw new Error("INVALID_SERVER_RESPONSE");
-        }
-
-        if (!data || typeof data !== "object") {
-          throw new Error("INVALID_SERVER_RESPONSE");
-        }
-
-        setConnection("online", "الاتصال بالخادم متاح");
-        return data;
       } catch (error) {
-        if (error.name === "AbortError") {
-          throw new Error("REQUEST_TIMEOUT");
-        }
-
-        // TypeError غالبًا يشير إلى مشكلة شبكة أو CORS.
-        throw error;
-      } finally {
-        clearTimeout(timeout);
+        throw new Error(
+          "تعذر الاتصال بالمحرك. قد تكون المشكلة في الشبكة أو سياسة CORS. " +
+          "التفاصيل: " + (error && error.message ? error.message : "اتصال غير متاح")
+        );
       }
+
+      const raw = await response.text();
+      let result;
+
+      try {
+        result = JSON.parse(raw);
+      } catch (_) {
+        throw new Error(
+          "استجابة المحرك ليست JSON صالحًا. تحقق من رابط النشر وصلاحية الوصول."
+        );
+      }
+
+      if (!response.ok) {
+        throw new Error(
+          result.error || ("فشل طلب المحرك. HTTP " + response.status)
+        );
+      }
+
+      return result;
     }
 
-    function responseSucceeded(data) {
-      return data.success === true ||
-        data.ok === true ||
-        data.status === "success";
+    function requireSuccess(result) {
+      if (!result || result.success !== true) {
+        throw new Error(
+          result && result.error
+            ? result.error
+            : "رفض المحرك العملية أو أعاد استجابة غير متوقعة."
+        );
+      }
+      return result;
     }
 
-    function responseMessage(data, fallback) {
-      return data.message || data.error || fallback;
+    function getProfile(result) {
+      return result.profile || result.account || result.admin || result.data || result;
     }
 
-    function isExplicitlyInvalidSession(data) {
-      const code = String(
-        data.code || data.error_code || data.error || data.status || ""
-      ).toLowerCase();
+    function renderProfile(result) {
+      const profile = getProfile(result);
 
-      return data.session_valid === false ||
-        data.authenticated === false ||
-        [
-          "session_expired",
-          "session_invalid",
-          "session_revoked",
-          "invalid_session",
-          "unauthorized",
-          "not_authenticated"
-        ].includes(code);
-    }
+      const username =
+        profile.username || profile.public_handle || profile.display_name || "—";
 
-    function showLogin() {
-      $("login-container").hidden = false;
-      $("dashboard-container").hidden = true;
+      const role = profile.role || profile.admin_role || "—";
+
+      $("profileUsername").textContent = username;
+      $("profileRole").textContent = role;
+      $("welcomeText").textContent = "مرحبًا، " + username;
+      $("sessionState").textContent = "نشطة";
     }
 
     function showDashboard() {
-      $("login-container").hidden = true;
-      $("dashboard-container").hidden = false;
+      $("loginSection").classList.add("hidden");
+      $("dashboardSection").classList.remove("hidden");
+      setStatus("الجلسة نشطة", "online");
     }
 
-    function setLoginBusy(busy) {
-      loginInProgress = busy;
-
-      const button = $("submit-btn");
-      button.disabled = busy;
-
-      if (busy) {
-        button.replaceChildren();
-
-        const spinner = document.createElement("span");
-        spinner.className = "spinner ml-2";
-        spinner.setAttribute("aria-hidden", "true");
-
-        button.append(spinner, document.createTextNode(" جارٍ التحقق..."));
-      } else {
-        button.textContent = "تسجيل الدخول";
-      }
+    function showLogin() {
+      $("dashboardSection").classList.add("hidden");
+      $("loginSection").classList.remove("hidden");
+      $("password").value = "";
+      setStatus("غير مسجل الدخول");
     }
 
-    function normalizeProfile(data) {
-      // دعم الرد المباشر أو الرد الذي يحتوي على profile.
-      return data.profile || data.admin || data.data || data;
-    }
-
-    function renderProfile(data) {
-      const profile = normalizeProfile(data);
-
-      setText(
-        "profile-admin-id",
-        profile.admin_id || profile.id || profile.document_id
-      );
-
-      setText(
-        "profile-email",
-        profile.email || profile.admin_email
-      );
-
-      setText(
-        "profile-username",
-        profile.username || profile.admin_username
-      );
-
-      setText(
-        "profile-role",
-        profile.role || profile.admin_role
-      );
-    }
-
-    async function getProfile() {
-      if (!sessionToken) return false;
-
-      const data = await apiRequest("get_my_profile", {
-        session_token: sessionToken
-      });
-
-      if (responseSucceeded(data)) {
-        renderProfile(data);
-        hideNotice("dashboard-alert");
-        return true;
-      }
-
-      if (isExplicitlyInvalidSession(data)) {
-        expireSession(
-          responseMessage(data, "انتهت صلاحية الجلسة. سجّل الدخول مجددًا.")
-        );
-        return false;
-      }
-
-      throw new Error(
-        responseMessage(data, "تعذر تحميل بيانات المسؤول.")
-      );
-    }
-
-    async function handleLogin(event) {
-      event.preventDefault();
-
-      if (loginInProgress) return;
-
-      hideNotice("error-alert");
-
-      const email = $("email").value.trim();
-      const password = $("password").value;
-
-      if (!email || !password) {
-        showNotice("error-alert", "أدخل البريد الإلكتروني وكلمة المرور.", "error");
-        return;
-      }
-
-      setLoginBusy(true);
+    async function login(email, password) {
+      if (requestInProgress) return;
+      requestInProgress = true;
+      $("loginButton").disabled = true;
+      $("loginButton").textContent = "جارٍ التحقق...";
 
       try {
-        const data = await apiRequest("login", {
+        deviceId = getDeviceId();
+
+        const result = requireSuccess(await api("login", {
           email,
           password,
-          device_id: getDeviceId()
-        });
-
-        if (!responseSucceeded(data)) {
-          showNotice(
-            "error-alert",
-            responseMessage(data, "تعذر تسجيل الدخول. تحقق من البيانات وصلاحيات الحساب."),
-            "error"
-          );
-          return;
-        }
+          device_id: deviceId
+        }));
 
         const token =
-          data.session_token ||
-          (data.session && data.session.session_token);
+          result.session_token ||
+          (result.data && result.data.session_token);
 
-        if (!token) {
-          showNotice(
-            "error-alert",
-            "استجابة الخادم لا تحتوي على رمز جلسة. راجع صيغة الرد في Code.gs.",
-            "error"
+        if (typeof token !== "string" || !token) {
+          throw new Error(
+            "نجح رد الدخول ظاهريًا، لكن لم يصل session_token. راجع صيغة استجابة المحرك."
           );
-          return;
         }
 
-        saveSession(token);
-        lastActivityAt = Date.now();
-        lastVerifiedAt = Date.now();
+        saveToken(token);
+        lastActivity = Date.now();
 
         showDashboard();
-        setStatusBadge("تم تسجيل الدخول", "online");
-        startCountdown();
+        showMessage("dashboardMessage", "تم تسجيل الدخول. جارٍ التحقق من بيانات الحساب...", "success");
+        startSessionMonitoring();
 
-        $("password").value = "";
-
-        try {
-          await getProfile();
-        } catch (profileError) {
-          showNotice(
-            "dashboard-alert",
-            "تم استلام الجلسة، لكن تعذر تحميل بيانات المسؤول. تحقق من الاتصال ثم أعد المحاولة.",
-            "info"
-          );
-          setConnection("warning", "تعذر تحميل البيانات");
-        }
+        await refreshProfile();
+        await verifySession(true);
       } catch (error) {
-        setConnection("offline", "تعذر الاتصال بالخادم");
-
-        showNotice(
-          "error-alert",
-          "لم نتمكن من الاتصال بمحرك AQX. تحقق من الإنترنت وإعدادات نشر Apps Script وCORS، ثم حاول مرة أخرى. لم نحذف أي جلسة محفوظة.",
-          "error"
-        );
+        clearToken();
+        stopSessionMonitoring();
+        showLogin();
+        showMessage("loginMessage", error.message || "تعذر تسجيل الدخول.", "error");
       } finally {
-        setLoginBusy(false);
+        requestInProgress = false;
+        $("loginButton").disabled = false;
+        $("loginButton").textContent = "تسجيل الدخول";
       }
     }
 
-    async function verifySession(options = {}) {
-      const showErrors = options.showErrors !== false;
-
-      if (!sessionToken || verifyInProgress) return false;
-
-      verifyInProgress = true;
-      setStatusBadge("جارٍ التحقق من الجلسة", "warning");
+    async function verifySession(silent = false) {
+      if (!sessionToken || logoutInProgress) return false;
 
       try {
-        const data = await apiRequest("verify_session", {
+        const result = requireSuccess(await api("verify_session", {
           session_token: sessionToken,
-          device_id: getDeviceId()
-        });
+          device_id: deviceId || getDeviceId()
+        }));
 
-        if (responseSucceeded(data)) {
-          lastVerifiedAt = Date.now();
-          setStatusBadge("الجلسة نشطة", "online");
-          hideNotice("dashboard-alert");
-          return true;
+        if (!silent) {
+          showMessage("dashboardMessage", "الجلسة صالحة.", "success");
         }
 
-        if (isExplicitlyInvalidSession(data)) {
-          expireSession(
-            responseMessage(data, "الجلسة غير صالحة أو انتهت صلاحيتها.")
-          );
-          return false;
-        }
-
-        // لا نمسح الرمز بسبب رد غير معروف أو خطأ في صيغة الاستجابة.
-        if (showErrors) {
-          showNotice(
-            "dashboard-alert",
-            responseMessage(data, "لم يتمكن الخادم من تأكيد صلاحية الجلسة."),
-            "info"
-          );
-        }
-
-        setStatusBadge("تعذر تأكيد الجلسة", "warning");
-        return false;
+        setStatus("الجلسة نشطة", "online");
+        $("sessionState").textContent = "نشطة";
+        return true;
       } catch (error) {
-        setConnection("offline", "الاتصال بالخادم غير متاح");
-        setStatusBadge("تعذر التحقق من الاتصال", "warning");
-
-        if (showErrors) {
-          showNotice(
-            "dashboard-alert",
-            "تعذر الوصول إلى الخادم مؤقتًا. لم يتم حذف رمز الجلسة؛ أعد المحاولة عند عودة الاتصال.",
-            "info"
-          );
-        }
-
+        // أي رفض صريح من المحرك يعني أن الجلسة لا يمكن اعتبارها صالحة.
+        await endLocalSession(
+          "انتهت الجلسة أو رفض المحرك التحقق منها. سجّل الدخول مرة أخرى.",
+          false
+        );
         return false;
-      } finally {
-        verifyInProgress = false;
       }
     }
 
     async function refreshProfile() {
       if (!sessionToken) return;
 
-      $("refresh-btn").disabled = true;
-      $("refresh-btn").textContent = "جارٍ التحديث...";
-
       try {
-        const valid = await verifySession({ showErrors: true });
+        const result = requireSuccess(await api("get_my_profile", {
+          session_token: sessionToken,
+          device_id: deviceId || getDeviceId()
+        }));
 
-        if (valid && sessionToken) {
-          await getProfile();
-          lastActivityAt = Date.now();
-          showNotice("dashboard-alert", "تم تحديث البيانات بنجاح.", "success");
-        }
+        renderProfile(result);
+        showMessage("dashboardMessage", "تم تحديث بيانات الحساب.", "success");
       } catch (error) {
-        showNotice(
-          "dashboard-alert",
-          "تعذر تحديث البيانات. تحقق من الاتصال وحاول مجددًا.",
-          "info"
+        showMessage(
+          "dashboardMessage",
+          error.message || "تعذر تحميل بيانات الحساب.",
+          "error"
         );
-      } finally {
-        $("refresh-btn").disabled = false;
-        $("refresh-btn").textContent = "تحديث بياناتي";
       }
     }
 
-    async function handleLogout() {
-      if (!sessionToken || logoutInProgress) return;
+    async function logout() {
+      if (logoutInProgress) return;
 
       logoutInProgress = true;
-      $("logout-btn").disabled = true;
-      $("logout-btn").textContent = "جارٍ تسجيل الخروج...";
-
-      const token = sessionToken;
 
       try {
-        const data = await apiRequest("logout", {
-          session_token: token,
-          device_id: getDeviceId()
-        });
-
-        if (responseSucceeded(data) || isExplicitlyInvalidSession(data)) {
-          clearSessionLocal();
-          showLogin();
-          hideNotice("error-alert");
-          $("password").value = "";
-          showNotice("error-alert", "تم إنهاء الجلسة محليًا.", "success");
-        } else {
-          showNotice(
-            "dashboard-alert",
-            "لم يؤكد الخادم تسجيل الخروج. يمكنك إعادة المحاولة عند استقرار الاتصال.",
-            "info"
-          );
+        if (sessionToken) {
+          await api("logout", {
+            session_token: sessionToken,
+            device_id: deviceId || getDeviceId()
+          });
         }
-      } catch (error) {
-        // لا ندّعي أن الخادم ألغى الجلسة إذا لم نعرف نتيجة الطلب.
-        // نحتفظ بالرمز كي يمكن إعادة المحاولة.
-        showNotice(
-          "dashboard-alert",
-          "تعذر تأكيد تسجيل الخروج بسبب مشكلة اتصال. أعد المحاولة. قد تظل الجلسة صالحة على الخادم.",
-          "info"
-        );
-        setConnection("offline", "تعذر تأكيد تسجيل الخروج");
+      } catch (_) {
+        // يتم مسح الرمز محليًا حتى لو تعذر الوصول للمحرك.
       } finally {
+        await endLocalSession("تم إنهاء الجلسة على هذا المتصفح.", true);
         logoutInProgress = false;
-        $("logout-btn").disabled = false;
-        $("logout-btn").textContent = "تسجيل الخروج";
       }
     }
 
-    function expireSession(message) {
-      clearSessionLocal();
-      showLogin();
-      $("password").value = "";
+    async function endLocalSession(message, showInfo = true) {
+      stopSessionMonitoring();
+      clearToken();
 
-      showNotice(
-        "error-alert",
-        message || "انتهت صلاحية الجلسة. سجّل الدخول مجددًا.",
-        "error"
-      );
+      $("sessionState").textContent = "غير نشطة";
+      showLogin();
+      clearMessage("loginMessage");
+
+      if (showInfo) {
+        showMessage("loginMessage", message, "info");
+      }
     }
 
     function updateCountdown() {
-      if (!sessionToken || $("dashboard-container").hidden) return;
-
-      const elapsed = Date.now() - lastActivityAt;
-      const remaining = Math.max(0, IDLE_LIMIT_MS - elapsed);
-      const totalSeconds = Math.ceil(remaining / 1000);
-      const minutes = Math.floor(totalSeconds / 60);
-      const seconds = totalSeconds % 60;
-
-      setText(
-        "idle-timer",
-        String(minutes).padStart(2, "0") + ":" +
-        String(seconds).padStart(2, "0")
+      const remaining = Math.max(
+        0,
+        IDLE_LIMIT_MS - (Date.now() - lastActivity)
       );
 
-      $("idle-progress").style.width =
-        (remaining / IDLE_LIMIT_MS * 100) + "%";
+      const totalSeconds = Math.ceil(remaining / 1000);
+      const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
+      const seconds = String(totalSeconds % 60).padStart(2, "0");
 
-      if (remaining <= 0) {
-        stopCountdown();
+      $("idleCountdown").textContent = minutes + ":" + seconds;
 
-        showNotice(
-          "dashboard-alert",
-          "انقضت مدة الخمول المحلية. جارٍ التحقق من صلاحية الجلسة مع الخادم.",
-          "info"
-        );
-
-        verifySession({ showErrors: true });
+      if (remaining <= 0 && sessionToken) {
+        logout();
       }
     }
 
-    function startCountdown() {
-      stopCountdown();
-      updateCountdown();
-
-      countdownInterval = setInterval(updateCountdown, 1000);
-    }
-
-    function stopCountdown() {
-      if (countdownInterval) {
-        clearInterval(countdownInterval);
-        countdownInterval = null;
+    function noteActivity() {
+      if (sessionToken) {
+        lastActivity = Date.now();
       }
     }
 
-    function recordActivity() {
-      if (!sessionToken || $("dashboard-container").hidden) return;
+    function stopSessionMonitoring() {
+      if (countdownTimer) clearInterval(countdownTimer);
+      if (verifyTimer) clearInterval(verifyTimer);
 
-      lastActivityAt = Date.now();
-      updateCountdown();
+      countdownTimer = null;
+      verifyTimer = null;
     }
 
-    function installActivityTracking() {
-      const events = ["pointerdown", "keydown", "touchstart"];
+    function startSessionMonitoring() {
+      stopSessionMonitoring();
 
-      events.forEach((eventName) => {
-        document.addEventListener(eventName, () => {
-          // تحديد معدل الأحداث لتجنب التحديث المتكرر بلا داعٍ.
-          if (activityHandlerTimer) return;
+      countdownTimer = setInterval(updateCountdown, 1000);
 
-          activityHandlerTimer = setTimeout(() => {
-            activityHandlerTimer = null;
-            recordActivity();
-          }, 500);
-        }, { passive: true });
-      });
-    }
+      verifyTimer = setInterval(async () => {
+        if (!sessionToken || logoutInProgress) return;
 
-    function startPeriodicVerification() {
-      setInterval(async () => {
-        if (!sessionToken || $("dashboard-container").hidden) return;
-
-        // لا نرسل تحققًا دوريًا إذا لم يوجد نشاط حديث.
-        // هذا يقلل تجديد last_activity_at بسبب نبضات آلية فقط.
-        const idleFor = Date.now() - lastActivityAt;
-
-        if (idleFor >= IDLE_LIMIT_MS) {
-          updateCountdown();
+        if (Date.now() - lastActivity >= IDLE_LIMIT_MS) {
+          await logout();
           return;
         }
 
-        if (Date.now() - lastVerifiedAt >= VERIFY_INTERVAL_MS) {
-          await verifySession({ showErrors: false });
-        }
-      }, 15000);
+        await verifySession(true);
+      }, VERIFY_INTERVAL_MS);
+
+      updateCountdown();
     }
 
-    async function restoreSession() {
-      const storedToken = loadSession();
+    $("loginForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      clearMessage("loginMessage");
 
-      if (!storedToken) {
-        showLogin();
-        setConnection("warning", "سجّل الدخول للمتابعة");
+      const email = $("email").value.trim();
+      const password = $("password").value;
+
+      if (!email || !password) {
+        showMessage("loginMessage", "أدخل البريد الإلكتروني وكلمة المرور.", "error");
         return;
       }
 
-      sessionToken = storedToken;
-      lastActivityAt = Date.now();
+      await login(email, password);
+    });
 
+    $("logoutButton").addEventListener("click", logout);
+
+    $("refreshButton").addEventListener("click", refreshProfile);
+
+    $("checkSessionButton").addEventListener("click", async () => {
+      const valid = await verifySession(false);
+      if (valid) await refreshProfile();
+    });
+
+    [
+      "pointerdown",
+      "keydown",
+      "touchstart",
+      "click"
+    ].forEach(eventName => {
+      document.addEventListener(eventName, noteActivity, { passive: true });
+    });
+
+    async function initialize() {
+      try {
+        deviceId = getDeviceId();
+      } catch (error) {
+        showMessage("loginMessage", error.message, "error");
+        return;
+      }
+
+      sessionToken = loadToken();
+
+      if (!sessionToken) {
+        showLogin();
+        return;
+      }
+
+      setStatus("جارٍ استعادة الجلسة...");
       showDashboard();
-      setStatusBadge("جارٍ استعادة الجلسة", "warning");
-      startCountdown();
+      lastActivity = Date.now();
 
-      const valid = await verifySession({ showErrors: true });
+      const valid = await verifySession(true);
 
-      if (valid && sessionToken) {
-        try {
-          await getProfile();
-        } catch (error) {
-          showNotice(
-            "dashboard-alert",
-            "تم تأكيد الجلسة، لكن تعذر تحميل الملف الشخصي. حاول تحديث البيانات.",
-            "info"
-          );
-        }
+      if (valid) {
+        startSessionMonitoring();
+        await refreshProfile();
       }
     }
 
-    $("login-form").addEventListener("submit", handleLogin);
-    $("logout-btn").addEventListener("click", handleLogout);
-    $("refresh-btn").addEventListener("click", refreshProfile);
-
-    installActivityTracking();
-    startPeriodicVerification();
-    restoreSession();
+    initialize();
   </script>
 </body>
 </html>
