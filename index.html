@@ -1,129 +1,239 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101827">
-  <title>AQX Email Registry</title>
-  <style>
-    :root{color-scheme:dark;--bg:#0b1220;--panel:#121c2e;--panel2:#18243a;--line:#293750;--text:#edf3ff;--muted:#9cacc5;--accent:#7c9cff;--good:#46d39a;--warn:#ffcc66}
-    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#172747 0,var(--bg) 52%);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;min-height:100vh}
-    .wrap{max-width:1050px;margin:auto;padding:24px 16px 48px}.top{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:22px}
-    .brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:15px;background:linear-gradient(135deg,#8aa7ff,#4759c9);display:grid;place-items:center;font-weight:900;color:white;letter-spacing:-1px}
-    h1{font-size:clamp(21px,4vw,30px);margin:0}.sub{color:var(--muted);font-size:13px;margin-top:5px}.status{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:9px 12px;color:var(--muted);font-size:13px}
-    .dot{width:8px;height:8px;border-radius:50%;background:#78869c}.dot.good{background:var(--good)}.dot.bad{background:#ff7777}
-    .notice{border:1px solid #725d2e;background:#332b1b;color:#ffe2a0;padding:13px 15px;border-radius:14px;font-size:13px;line-height:1.8;margin-bottom:18px}
-    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:18px}.card{background:rgba(18,28,46,.94);border:1px solid var(--line);border-radius:18px;padding:18px}
-    .metric-label{color:var(--muted);font-size:13px}.metric{font-size:27px;font-weight:750;margin-top:10px}.metric-note{font-size:12px;color:var(--muted);margin-top:6px}
-    .section-title{font-size:17px;margin:0 0 6px}.section-sub{font-size:13px;color:var(--muted);margin:0 0 16px}
-    .actions{display:flex;gap:10px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:11px;padding:11px 15px;font:inherit;cursor:pointer}.btn.primary{background:#526de0;border-color:#526de0}.btn:disabled{opacity:.55;cursor:not-allowed}
-    .searchrow{display:flex;gap:9px;margin-top:14px}.searchrow input{min-width:0;flex:1}.field{width:100%;border:1px solid var(--line);background:#0d1728;color:var(--text);border-radius:11px;padding:12px;font:inherit;outline:none}.field:focus{border-color:var(--accent)}
-    .tablewrap{overflow:auto;border:1px solid var(--line);border-radius:12px;margin-top:14px}.empty{padding:22px;color:var(--muted);font-size:13px;text-align:center;line-height:1.8}
-    .foot{color:var(--muted);font-size:12px;line-height:1.8;margin-top:18px}
-    @media(max-width:650px){.grid{grid-template-columns:1fr}.wrap{padding:18px 12px 32px}.searchrow{flex-direction:column}.searchrow .btn{width:100%}}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AQX Central Admin | بوابة الإدارة المركزية</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+        body { font-family: 'Cairo', sans-serif; }
+    </style>
 </head>
-<body>
-  <main class="wrap">
-    <header class="top">
-      <div class="brand">
-        <div class="logo">AQX</div>
-        <div><h1>AQX Email Registry</h1><div class="sub">لوحة إدارة سجل الإيميلات والمشروعات</div></div>
-      </div>
-      <div class="status" aria-live="polite"><span id="statusDot" class="dot"></span><span id="engineStatus">لم يتم فحص المحرك بعد</span></div>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-cyan-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur py-4 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="w-3 h-3 bg-cyan-500 rounded-full animate-pulse"></div>
+                <span class="font-bold text-lg tracking-wider text-cyan-400">AQX CENTRAL ADMIN</span>
+            </div>
+            <div id="status-badge" class="text-xs px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-400">
+                غير متصل
+            </div>
+        </div>
     </header>
 
-    <div class="notice">
-      <strong>وضع الإعداد الأولي:</strong>
-      الواجهة جاهزة كمرحلة أولى. اختبار الاتصال لا يقرأ بيانات الإيميلات ولا يعدّلها.
-      لن يتم تفعيل البحث أو الإضافة أو التعديل قبل إعداد مصادقة آمنة للمدير.
-    </div>
+    <!-- Main Container -->
+    <main class="flex-grow flex items-center justify-center p-4">
+        
+        <!-- Login Card -->
+        <div id="login-container" class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-8 space-y-6">
+            <div class="text-center space-y-2">
+                <h1 class="text-2xl font-bold text-white tracking-wide">تسجيل الدخول للمركز</h1>
+                <p class="text-xs text-slate-400">نظام إدارة فائق الحماية مخصص للمشرفين فقط</p>
+            </div>
 
-    <section class="grid" aria-label="ملخص السجل">
-      <article class="card"><div class="metric-label">إجمالي الإيميلات</div><div class="metric">—</div><div class="metric-note">سيظهر بعد تأمين واجهة البيانات</div></article>
-      <article class="card"><div class="metric-label">المشروعات المرتبطة</div><div class="metric">—</div><div class="metric-note">سيظهر بعد ربط بيانات المشروعات</div></article>
-      <article class="card"><div class="metric-label">حالة الاتصال</div><div class="metric" id="connectionMetric">غير مختبر</div><div class="metric-note">فحص اتصال للقراءة فقط</div></article>
-    </section>
+            <div id="error-alert" class="hidden p-4 rounded-xl bg-red-950/50 border border-red-800/60 text-red-300 text-sm"></div>
 
-    <section class="card">
-      <h2 class="section-title">فحص المحرك</h2>
-      <p class="section-sub">يفحص أن عنوان Google Apps Script يستجيب. لا ينفّذ أي عملية كتابة.</p>
-      <div class="actions"><button class="btn primary" id="testBtn" type="button">اختبار الاتصال</button></div>
-      <p id="testMessage" class="foot" aria-live="polite">أضف رابط Web App الخاص بالمحرك في الإعداد داخل هذا الملف أولًا.</p>
-    </section>
+            <form id="login-form" class="space-y-4" onsubmit="handleLogin(event)">
+                <div class="space-y-1">
+                    <label class="text-xs text-slate-400">البريد الإلكتروني للإدارة</label>
+                    <input type="email" id="email" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-cyan-500 transition-all text-slate-200" placeholder="admin@alqurmanix.com">
+                </div>
 
-    <section class="card" style="margin-top:14px">
-      <h2 class="section-title">سجل الإيميلات</h2>
-      <p class="section-sub">ستُفعّل أدوات البحث والإضافة بعد تجهيز API محمي. لا تُدخل بيانات حقيقية في هذه المرحلة.</p>
-      <div class="searchrow">
-        <input class="field" type="email" placeholder="البحث بالبريد الإلكتروني (غير مفعّل بعد)" disabled>
-        <button class="btn" type="button" disabled>بحث</button>
-        <button class="btn primary" type="button" disabled>إضافة إيميل</button>
-      </div>
-      <div class="tablewrap"><div class="empty">لا توجد بيانات معروضة. تم تعطيل عرض السجل عمدًا لحين إعداد التحقق من هوية المدير.</div></div>
-    </section>
+                <div class="space-y-1">
+                    <label class="text-xs text-slate-400">كلمة المرور</label>
+                    <input type="password" id="password" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-cyan-500 transition-all text-slate-200" placeholder="••••••••••••">
+                </div>
 
-    <footer class="foot">AQX Email Registry · الواجهة لا تحتوي على مفتاح سري. لا تضع أي API key أو كلمة مرور داخل ملفات GitHub Pages.</footer>
-  </main>
-<script>
-  // ضع رابط Google Apps Script المنشور كـ Web App هنا.
-  // هذا الفحص مخصص للصحة العامة فقط، ولا يرسل بيانات حساسة.
-  const AQX_ENGINE_URL = "https://script.google.com/macros/s/AKfycbxJVMKlurj3JGRgJbfdc-HRsvQvMCSjSrmUVHQzbg5vFjETNiIKE0Gd8OYFqsCEZJ1V/exec";
+                <button type="submit" id="submit-btn" class="w-full py-3 px-4 bg-cyan-600 hover:bg-cyan-500 text-white font-semibold rounded-xl transition-all shadow-lg shadow-cyan-900/30 flex items-center justify-center space-x-2 space-x-reverse">
+                    <span>تحقق ودخول آمن</span>
+                </button>
+            </form>
+        </div>
 
-  const testBtn = document.getElementById("testBtn");
-  const statusText = document.getElementById("engineStatus");
-  const statusDot = document.getElementById("statusDot");
-  const connectionMetric = document.getElementById("connectionMetric");
-  const testMessage = document.getElementById("testMessage");
+        <!-- Dashboard Protected Area (Hidden by default) -->
+        <div id="dashboard-container" class="hidden w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-8 space-y-6">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white">لوحة التحكم المركزية</h2>
+                    <p class="text-xs text-cyan-400">أنت مسجل الدخول بصلاحيات Super Admin كاملة</p>
+                </div>
+                <button onclick="handleLogout()" class="px-4 py-2 bg-red-600/20 hover:bg-red-600 border border-red-700/50 text-red-300 hover:text-white rounded-xl text-xs transition-all">
+                    تسجيل الخروج
+                </button>
+            </div>
 
-  function setStatus(ok, label, message) {
-    statusText.textContent = label;
-    statusDot.className = "dot" + (ok === true ? " good" : ok === false ? " bad" : "");
-    connectionMetric.textContent = ok === true ? "متصل" : ok === false ? "فشل" : "غير مختبر";
-    testMessage.textContent = message;
-  }
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-1">
+                    <span class="text-xs text-slate-500">معرف المشرف (Admin ID)</span>
+                    <p id="profile-admin-id" class="text-sm font-mono text-cyan-300">-</p>
+                </div>
+                <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-1">
+                    <span class="text-xs text-slate-500">البريد الإلكتروني</span>
+                    <p id="profile-email" class="text-sm font-mono text-slate-300">-</p>
+                </div>
+                <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-1">
+                    <span class="text-xs text-slate-500">انتهاء جلسة الخمول</span>
+                    <p id="idle-timer" class="text-sm font-mono text-amber-400">30:00</p>
+                </div>
+            </div>
 
-  testBtn.addEventListener("click", () => {
-    if (!AQX_ENGINE_URL || AQX_ENGINE_URL.includes("PASTE_YOUR")) {
-      setStatus(null, "الرابط غير مضبوط", "افتح index.html واستبدل PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE برابط Web App المنشور.");
-      return;
-    }
-    if (!/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec(?:\?.*)?$/.test(AQX_ENGINE_URL)) {
-      setStatus(false, "رابط غير صالح", "استخدم رابط Web App المنشور الذي يبدأ بـ https://script.google.com/macros/s/ وينتهي بـ /exec.");
-      return;
-    }
+            <div class="p-6 bg-slate-950 border border-slate-800 rounded-xl text-center space-y-2">
+                <p class="text-sm text-slate-400">النظام مؤمن بالكامل وجاهز لتنفيذ الأوامر الإدارية وربط قواعد البيانات.</p>
+            </div>
+        </div>
 
-    testBtn.disabled = true;
-    setStatus(null, "جارٍ الفحص…", "يتم إرسال طلب فحص آمن للقراءة فقط.");
-    const callbackName = "aqxHealthCallback";
-    const previous = window[callbackName];
-    const script = document.createElement("script");
-    let finished = false;
-    const timeout = setTimeout(() => finish(false, "انتهت مهلة الفحص. راجع رابط المحرك ونشر Web App."), 12000);
+    </main>
 
-    function finish(ok, message) {
-      if (finished) return;
-      finished = true;
-      clearTimeout(timeout);
-      script.remove();
-      if (previous === undefined) delete window[callbackName]; else window[callbackName] = previous;
-      testBtn.disabled = false;
-      setStatus(ok, ok ? "المحرك يستجيب" : "تعذر التحقق", message);
-    }
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 py-4 text-center text-xs text-slate-500">
+        AQX Citadel Engine &copy; 2026 - All Rights Reserved
+    </footer>
 
-    window[callbackName] = data => {
-      if (data && data.success === true && data.engine === "AQX Email Registry Engine Pro") {
-        finish(true, "المحرك استجاب. هذا لا يثبت وحده أن عمليات إدارة البيانات مفعّلة.");
-      } else {
-        finish(false, "وصل رد، لكن صيغة الرد لا تطابق فحص AQX المتوقع.");
-      }
-    };
+    <!-- JavaScript Logic -->
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbyTEeH03GJw0RPzvNSveTjwXGCMI82WyEwIsBv6EvOZqgbmgQKwMr8sSioovSsPBq8n9Q/exec";
+        
+        let deviceId = localStorage.getItem("aqx_device_id");
+        if (!deviceId) {
+            deviceId = "dev_" + Math.random().toString(36).substring(2) + Date.now();
+            localStorage.setItem("aqx_device_id", deviceId);
+        }
 
-    script.onerror = () => finish(false, "تعذر تحميل رد المحرك. تأكد من تفعيل فحص JSONP في Apps Script.");
-    script.src = AQX_ENGINE_URL + (AQX_ENGINE_URL.includes("?") ? "&" : "?") +
-      "action=health&callback=" + encodeURIComponent(callbackName) + "&_=" + Date.now();
-    document.head.appendChild(script);
-  });
-</script>
+        window.addEventListener("DOMContentLoaded", () => {
+            const token = localStorage.getItem("aqx_session_token");
+            if (token) {
+                verifySession(token);
+            } else {
+                updateStatus("جاهز للاستخدام", "text-slate-400");
+            }
+        });
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+            const btn = document.getElementById("submit-btn");
+            const alertBox = document.getElementById("error-alert");
+
+            alertBox.classList.add("hidden");
+            btn.disabled = true;
+            btn.innerText = "جاري التحقق الأمني...";
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        action: "login",
+                        email: email,
+                        password: password,
+                        device_id: deviceId
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success && result.session_token) {
+                    localStorage.setItem("aqx_session_token", result.session_token);
+                    showDashboard(result.admin_id, email);
+                } else {
+                    showAlert(result.error || "فشل تسجيل الدخول. تأكد من البيانات.");
+                }
+            } catch (err) {
+                showAlert("حدث خطأ في الاتصال بالخادم.");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "تحقق ودخول آمن";
+            }
+        }
+
+        async function verifySession(token) {
+            updateStatus("جاري فحص الجلسة...", "text-amber-400");
+            try {
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        action: "verify_session",
+                        session_token: token
+                    })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    getProfile(token);
+                } else {
+                    handleLogoutLocal();
+                }
+            } catch (err) {
+                handleLogoutLocal();
+            }
+        }
+
+        async function getProfile(token) {
+            try {
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        action: "get_my_profile",
+                        session_token: token
+                    })
+                });
+                const result = await response.json();
+                if (result.success && result.profile) {
+                    showDashboard(result.profile.admin_id, result.profile.email);
+                } else {
+                    handleLogoutLocal();
+                }
+            } catch (err) {
+                handleLogoutLocal();
+            }
+        }
+
+        async function handleLogout() {
+            const token = localStorage.getItem("aqx_session_token");
+            if (token) {
+                try {
+                    await fetch(API_URL, {
+                        method: "POST",
+                        body: JSON.stringify({
+                            action: "logout",
+                            session_token: token
+                        })
+                    });
+                } catch (e) {}
+            }
+            handleLogoutLocal();
+        }
+
+        function handleLogoutLocal() {
+            localStorage.removeItem("aqx_session_token");
+            document.getElementById("dashboard-container").classList.add("hidden");
+            document.getElementById("login-container").classList.remove("hidden");
+            updateStatus("غير متصل", "text-slate-400");
+        }
+
+        function showDashboard(adminId, email) {
+            document.getElementById("login-container").classList.add("hidden");
+            document.getElementById("dashboard-container").classList.remove("hidden");
+            document.getElementById("profile-admin-id").innerText = adminId;
+            document.getElementById("profile-email").innerText = email;
+            updateStatus("متصل بشكل آمن", "text-emerald-400");
+        }
+
+        function showAlert(msg) {
+            const box = document.getElementById("error-alert");
+            box.innerText = msg;
+            box.classList.remove("hidden");
+        }
+
+        function updateStatus(text, colorClass) {
+            const badge = document.getElementById("status-badge");
+            badge.innerText = text;
+            badge.className = `text-xs px-3 py-1 rounded-full bg-slate-800 border border-slate-700 ${colorClass}`;
+        }
+    </script>
 </body>
 </html>
