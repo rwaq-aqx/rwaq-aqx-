@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تسجيل الدخول - AQX Central Admin</title>
-    <!-- تضمين مكتبة Tailwind CSS للتصميم السريع والعصري -->
+    <!-- تضمين مكتبة Tailwind CSS للتصميم العصري -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-900 text-gray-100 flex items-center justify-center min-h-screen">
@@ -42,8 +42,8 @@
     </div>
 
     <script>
-        // رابط نشر الـ Web App الخاص بك على Google Apps Script
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyPqUtLQFb5yYfTQcHDElI3ipxQoI0yW04n8s1Dj3XdS_oWSlMcIP7dDCbv57Q6_he-/exec";
+        // رابط النشر الجديد الخاص بـ Google Apps Script
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxkgOSE2Nw8r3sEDYbqhs9z9Zdtuv4fVOKu6j9V8MfyzhkqImKynLbkleB4sIBlc49ipA/exec";
 
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -64,7 +64,7 @@
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'text/plain;charset=utf-8' // لتجنب قيود الـ CORS في المتصفحات مع Google Apps Script
+                        'Content-Type': 'text/plain;charset=utf-8' // لتجاوز قيود الـ CORS في المتصفحات
                     },
                     body: JSON.stringify({
                         action: 'login',
@@ -79,11 +79,11 @@
                     successDiv.textContent = 'تم تسجيل الدخول بنجاح! جاري التوجيه...';
                     successDiv.classList.remove('hidden');
                     
-                    // حفظ رمز الجلسة وبيانات المسؤول في المتصفح للاستخدام المستقبلي
+                    // حفظ بيانات الجلسة محلياً في المتصفح
                     localStorage.setItem('aqx_session_token', data.session_token);
                     localStorage.setItem('aqx_admin_info', JSON.stringify(data.admin));
                     
-                    // توجيه المستخدم بعد ثانية واحدة (يمكنك تغيير الصفحة المستهدفة لاحقاً)
+                    // التوجيه إلى صفحة التحكم بعد ثانية
                     setTimeout(() => {
                         window.location.href = 'dashboard.html'; 
                     }, 1000);
