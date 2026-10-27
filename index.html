@@ -2,231 +2,402 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0b1020">
-<title>AQX Central Admin</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:#080d19;color:#f3f6ff;font-family:Tahoma,Arial,sans-serif;display:grid;place-items:center;padding:20px}
-main{width:100%;max-width:440px}
-header{text-align:center;margin-bottom:24px}
-.logo{margin:auto auto 14px;width:62px;height:62px;border:1px solid #536da8;border-radius:18px;display:grid;place-items:center;font-size:23px;font-weight:bold;background:#152441}
-h1{font-size:24px;margin:0 0 8px}
-.sub,small{color:#9eacc5}
-.card{background:#111a2b;border:1px solid #2a3953;border-radius:17px;padding:24px}
-h2{font-size:19px;margin:0 0 8px}
-p{font-size:13px;line-height:1.8;color:#aab8d0}
-label{display:block;font-size:13px;margin:17px 0 8px}
-input{width:100%;padding:14px;border-radius:9px;border:1px solid #35445e;background:#091222;color:white;font-size:15px;outline:none}
-input:focus{border-color:#86a4ff}
-button{width:100%;padding:14px;margin-top:18px;border:0;border-radius:9px;background:#91aaff;color:#091225;font-weight:bold;font-size:14px;cursor:pointer}
-button:disabled{opacity:.6}
-.secondary{background:#24334d;color:white;margin-top:10px}
-.msg{display:none;white-space:pre-wrap;overflow-wrap:anywhere;padding:12px;margin-top:16px;border-radius:9px;font-size:13px;line-height:1.8}
-.msg.show{display:block}
-.err{background:#451e2a;color:#ffdce1}
-.ok{background:#12372c;color:#c8ffe2}
-.info{background:#172b48;color:#d9e8ff}
-.hidden{display:none!important}
-#profile{margin-top:18px;padding:14px;border:1px solid #2a3953;border-radius:10px;line-height:2;overflow-wrap:anywhere}
-footer{text-align:center;color:#7e8ba3;font-size:11px;margin-top:18px;line-height:1.8}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1020">
+  <title>AQX Central Admin</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080c18;
+      --panel: #11182a;
+      --panel2: #0d1424;
+      --border: #26334b;
+      --text: #f1f5ff;
+      --muted: #9baac2;
+      --accent: #7c9cff;
+      --green: #54d6a0;
+      --red: #ff818b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(ellipse at top, #172344 0, var(--bg) 55%);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    button:disabled { opacity: .6; cursor: wait; }
+    .wrap { width: min(100% - 28px, 1000px); margin: auto; padding: 28px 0 40px; }
+    header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 26px; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .logo {
+      display: grid; place-items: center; width: 48px; height: 48px;
+      border-radius: 15px; background: linear-gradient(135deg,#7c9cff,#7958db);
+      font-weight: 900; font-size: 19px; color: white;
+    }
+    h1 { margin: 0; font-size: 20px; }
+    .sub { margin-top: 5px; color: var(--muted); font-size: 12px; }
+    .pill { border: 1px solid var(--border); padding: 8px 11px; border-radius: 30px; color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .card { background: rgba(17,24,42,.96); border: 1px solid var(--border); border-radius: 20px; padding: 24px; box-shadow: 0 18px 50px #0003; }
+    .login-card { max-width: 460px; margin: 45px auto; }
+    h2 { font-size: 20px; margin: 0 0 8px; }
+    .desc { color: var(--muted); font-size: 13px; line-height: 1.8; margin: 0 0 24px; }
+    label { display: block; font-size: 13px; margin: 17px 0 8px; color: #dbe5f7; }
+    input {
+      width: 100%; padding: 13px 14px; border-radius: 11px;
+      border: 1px solid var(--border); background: var(--panel2);
+      color: white; outline: none;
+    }
+    input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px #7c9cff20; }
+    .btn {
+      width: 100%; border: 0; border-radius: 11px; padding: 13px 16px;
+      background: var(--accent); color: #081021; font-weight: 800; margin-top: 20px;
+    }
+    .btn.secondary { width: auto; margin: 0; background: #202b42; color: var(--text); border: 1px solid var(--border); }
+    .message { display: none; margin-top: 16px; border-radius: 10px; padding: 12px; font-size: 13px; line-height: 1.8; overflow-wrap: anywhere; }
+    .message.show { display: block; }
+    .message.error { color: #ffd3d6; background: #401d2a; border: 1px solid #793341; }
+    .message.success { color: #c3ffe3; background: #10392d; border: 1px solid #23654f; }
+    .message.info { color: #d6e2ff; background: #172746; border: 1px solid #304b7c; }
+    .hidden { display: none !important; }
+    .dashboard-head { display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; }
+    .grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 15px; }
+    .tile { background: var(--panel2); border: 1px solid var(--border); border-radius: 15px; padding: 18px; min-width: 0; }
+    .tile .k { color: var(--muted); font-size: 12px; margin-bottom: 10px; }
+    .tile .v { font-size: 15px; font-weight: 700; overflow-wrap: anywhere; }
+    .section { margin-top: 18px; }
+    .section h3 { font-size: 15px; margin: 0 0 12px; }
+    .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-left: 6px; }
+    footer { text-align: center; color: #75839c; font-size: 11px; margin-top: 26px; }
+    @media(max-width:540px) {
+      .wrap { width: min(100% - 20px,1000px); padding-top: 18px; }
+      .card { padding: 19px; }
+      .grid { grid-template-columns: 1fr; }
+      .login-card { margin-top: 30px; }
+      h1 { font-size: 17px; }
+    }
+  </style>
 </head>
 <body>
-<main>
-<header>
-<div class="logo">AQX</div>
-<h1>AQX Central Admin</h1>
-<div class="sub">مركز الإدارة والتحكم المركزي</div>
-</header>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="logo">AQX</div>
+      <div>
+        <h1>AQX Central Admin</h1>
+        <div class="sub">المركز الإداري المركزي</div>
+      </div>
+    </div>
+    <div class="pill">الإصدار 1.0.0</div>
+  </header>
 
-<section class="card" id="loginPanel">
-<h2>تسجيل دخول الإدارة</h2>
-<p>أدخل بيانات حساب الإدارة المسجل في النظام.</p>
-<form id="loginForm">
-<label for="email">البريد الإلكتروني</label>
-<input id="email" type="email" autocomplete="username" required>
-<label for="password">كلمة المرور</label>
-<input id="password" type="password" autocomplete="current-password" required>
-<button id="loginBtn" type="submit">تسجيل الدخول</button>
-</form>
-<div id="loginMsg" class="msg" role="status"></div>
-</section>
+  <main>
+    <section id="loginView" class="card login-card">
+      <h2>تسجيل دخول المدير</h2>
+      <p class="desc">سجّل الدخول باستخدام حساب المدير المعتمد في نظام AQX.</p>
 
-<section class="card hidden" id="adminPanel">
-<h2>لوحة الإدارة</h2>
-<p>لا تظهر هذه اللوحة إلا بعد تأكيد الجلسة من المحرك.</p>
-<div id="profile"></div>
-<button class="secondary" id="verifyBtn" type="button">التحقق من الجلسة</button>
-<button id="logoutBtn" type="button">تسجيل الخروج</button>
-<div id="adminMsg" class="msg" role="status"></div>
-</section>
+      <form id="loginForm">
+        <label for="email">البريد الإلكتروني</label>
+        <input id="email" type="email" autocomplete="username"
+               placeholder="admin@example.com" required>
 
-<footer>ALQURMANI X · AQX Central Admin</footer>
-</main>
+        <label for="password">كلمة المرور</label>
+        <input id="password" type="password" autocomplete="current-password"
+               placeholder="أدخل كلمة المرور" required>
+
+        <button id="loginBtn" class="btn" type="submit">تسجيل الدخول</button>
+      </form>
+      <div id="loginMessage" class="message" role="status" aria-live="polite"></div>
+    </section>
+
+    <section id="dashboardView" class="hidden">
+      <div class="dashboard-head">
+        <div>
+          <h2>لوحة التحكم</h2>
+          <p class="desc" style="margin:7px 0 0">مرحبًا بك في مركز إدارة AQX.</p>
+        </div>
+        <button id="logoutBtn" class="btn secondary" type="button">تسجيل الخروج</button>
+      </div>
+
+      <div class="grid">
+        <div class="tile">
+          <div class="k">حالة المحرك</div>
+          <div class="v"><span class="status-dot"></span><span id="engineStatus">جارٍ الفحص</span></div>
+        </div>
+        <div class="tile">
+          <div class="k">حالة الجلسة</div>
+          <div class="v" id="sessionStatus">جارٍ التحقق</div>
+        </div>
+        <div class="tile">
+          <div class="k">البريد الإلكتروني</div>
+          <div class="v" id="adminEmail">—</div>
+        </div>
+        <div class="tile">
+          <div class="k">معرّف المدير</div>
+          <div class="v" id="adminId">—</div>
+        </div>
+      </div>
+
+      <div class="card section">
+        <h3>حالة الاتصال</h3>
+        <p id="connectionInfo" class="desc" style="margin:0">تم فتح الواجهة.</p>
+        <div id="dashboardMessage" class="message" role="status" aria-live="polite"></div>
+        <button id="verifyBtn" class="btn" type="button">التحقق من الجلسة الآن</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>AQX Central Admin · واجهة الإدارة المركزية</footer>
+</div>
 
 <script>
-"use strict";
+(() => {
+  "use strict";
 
-const ENGINE_URL="https://script.google.com/macros/s/AKfycbzZ-gs-PiOLsSlov68EebKXORGHOQlfb1Htf9vUOGHJdSFsy5vMWIdKVtmoLM2jlmFf/exec";
-const TOKEN_KEY="aqx_admin_session_token";
+  const ENGINE_URL =
+    "https://script.google.com/macros/s/AKfycbxGsyWezXtOeasJspjsWJEkxeEfrOZdtiBM-bQJVnAgSuRcDZV9Go5j5Uod0mFMEWOI/exec";
 
-const $=id=>document.getElementById(id);
-let busy=false;
+  const TOKEN_KEY = "aqx_admin_session_token";
+  const $ = id => document.getElementById(id);
 
-function message(id,text,type="info"){
-  const el=$(id);
-  el.textContent=text;
-  el.className="msg show "+type;
-}
-function clearMessage(id){
-  $(id).textContent="";
-  $(id).className="msg";
-}
-function showLogin(){
-  $("loginPanel").classList.remove("hidden");
-  $("adminPanel").classList.add("hidden");
-}
-function showAdmin(){
-  $("loginPanel").classList.add("hidden");
-  $("adminPanel").classList.remove("hidden");
-}
-function token(){
-  return sessionStorage.getItem(TOKEN_KEY);
-}
-function saveToken(value){
-  if(typeof value!=="string"||!value.trim()){
-    throw Error("المحرك لم يُرجع session_token صالحًا.");
+  let currentAdmin = null;
+  let busy = false;
+
+  function showMessage(id, text, type = "info") {
+    const el = $(id);
+    el.textContent = text;
+    el.className = "message show " + type;
   }
-  sessionStorage.setItem(TOKEN_KEY,value);
-}
-async function requestEngine(data){
-  let response;
-  try{
-    response=await fetch(ENGINE_URL,{
-      method:"POST",
-      redirect:"follow",
-      headers:{"Content-Type":"text/plain;charset=UTF-8"},
-      body:JSON.stringify(data),
-      cache:"no-store"
-    });
-  }catch(e){
-    throw Error("تعذّر الاتصال بالمحرك أو قراءة رده من المتصفح. إذا كانت المشكلة CORS أو تحويل Google Apps Script فلن يستطيع كود الواجهة وحده تجاوزها. "+(e.message||""));
+
+  function clearMessage(id) {
+    const el = $(id);
+    el.textContent = "";
+    el.className = "message";
   }
-  const raw=await response.text();
-  let result;
-  try{
-    result=JSON.parse(raw);
-  }catch(e){
-    throw Error("رد المحرك ليس JSON صالحًا. قد تكون استجابة تحويل أو صفحة خطأ من Google.");
+
+  function setBusy(value) {
+    busy = value;
+    $("loginBtn").disabled = value;
+    $("verifyBtn").disabled = value;
+    $("logoutBtn").disabled = value;
+    $("loginBtn").textContent = value ? "جارٍ الاتصال بالمحرك..." : "تسجيل الدخول";
   }
-  if(!response.ok)throw Error("HTTP "+response.status);
-  return result;
-}
-function showProfile(data){
-  const admin=data.admin||data.profile||{};
-  const rows=[
-    ["البريد",admin.email||$("email").value||"—"],
-    ["المعرّف",admin.id||admin.admin_id||admin.firebase_uid||"—"],
-    ["الحالة",admin.status||"الجلسة مؤكدة"],
-    ["انتهاء الجلسة",data.expires_at||admin.expires_at||"وفق المحرك"]
-  ];
-  const box=$("profile");
-  box.replaceChildren();
-  rows.forEach(([label,value])=>{
-    const line=document.createElement("div");
-    const strong=document.createElement("strong");
-    strong.textContent=label+": ";
-    line.append(strong,document.createTextNode(String(value)));
-    box.append(line);
-  });
-}
-async function verifySession(){
-  const current=token();
-  if(!current){showLogin();return false;}
-  try{
-    const result=await requestEngine({
-      action:"verify_session",
-      session_token:current
-    });
-    if(!result||result.ok!==true){
-      sessionStorage.removeItem(TOKEN_KEY);
-      showLogin();
-      message("loginMsg",result?.message||result?.error||"الجلسة غير صالحة. سجّل الدخول مجددًا.","err");
+
+  async function api(action, data = {}) {
+    let response;
+    try {
+      response = await fetch(ENGINE_URL, {
+        method: "POST",
+        redirect: "follow",
+        headers: { "Content-Type": "text/plain;charset=UTF-8" },
+        body: JSON.stringify({ action, ...data })
+      });
+    } catch (error) {
+      throw new Error(
+        "تعذّر الوصول إلى المحرك من المتصفح. قد تكون المشكلة في الاتصال أو CORS أو تحويل Google Apps Script. التفاصيل: " +
+        (error && error.message ? error.message : "Network error")
+      );
+    }
+
+    const raw = await response.text();
+    let result;
+
+    try {
+      result = JSON.parse(raw);
+    } catch (_) {
+      throw new Error(
+        "استجابة المحرك ليست JSON صالحًا. HTTP " + response.status +
+        ". بداية الاستجابة: " + raw.slice(0, 180)
+      );
+    }
+
+    if (!response.ok) {
+      throw new Error(result.message || result.error || ("HTTP " + response.status));
+    }
+
+    return result;
+  }
+
+  function getToken() {
+    try { return sessionStorage.getItem(TOKEN_KEY); }
+    catch (_) { return null; }
+  }
+
+  function saveToken(token) {
+    if (!token) throw new Error("المحرك لم يُرجع session_token.");
+    sessionStorage.setItem(TOKEN_KEY, token);
+  }
+
+  function clearToken() {
+    sessionStorage.removeItem(TOKEN_KEY);
+    currentAdmin = null;
+  }
+
+  function showLogin(message) {
+    $("dashboardView").classList.add("hidden");
+    $("loginView").classList.remove("hidden");
+    $("password").value = "";
+    if (message) showMessage("loginMessage", message, "error");
+  }
+
+  function showDashboard(admin = {}) {
+    currentAdmin = admin || {};
+    $("loginView").classList.add("hidden");
+    $("dashboardView").classList.remove("hidden");
+
+    $("engineStatus").textContent = "يستجيب";
+    $("sessionStatus").textContent = "تم التحقق";
+    $("adminEmail").textContent =
+      currentAdmin.email || currentAdmin.email_address || "—";
+    $("adminId").textContent =
+      currentAdmin.admin_id || currentAdmin.id ||
+      currentAdmin.uid || currentAdmin.firebase_uid || "—";
+
+    $("connectionInfo").textContent =
+      "تم التحقق من الجلسة بواسطة المحرك. لا تعرض هذه الواجهة بيانات إدارية إضافية ما لم يوفرها المحرك.";
+    clearMessage("dashboardMessage");
+  }
+
+  function extractAdmin(result) {
+    return result.admin || result.profile || result.data?.admin ||
+      result.data?.profile || {};
+  }
+
+  async function checkHealth() {
+    try {
+      const result = await api("health");
+      if (result.ok) {
+        $("engineStatus").textContent = "يستجيب";
+        return true;
+      }
+      $("engineStatus").textContent = "استجابة غير متوقعة";
+      return false;
+    } catch (error) {
+      $("engineStatus").textContent = "تعذّر الاتصال";
+      showMessage("dashboardMessage", error.message, "error");
       return false;
     }
-    showProfile(result);
-    showAdmin();
-    message("adminMsg","تم تأكيد الجلسة من المحرك.","ok");
-    return true;
-  }catch(e){
-    message("adminMsg",e.message,"err");
-    return false;
   }
-}
-$("loginForm").addEventListener("submit",async event=>{
-  event.preventDefault();
-  if(busy)return;
-  clearMessage("loginMsg");
-  busy=true;
-  $("loginBtn").disabled=true;
-  $("loginBtn").textContent="جارٍ التحقق...";
-  try{
-    const result=await requestEngine({
-      action:"login",
-      email:$("email").value.trim(),
-      password:$("password").value
-    });
-    if(!result||result.ok!==true){
-      message("loginMsg",result?.message||result?.error||"رفض المحرك تسجيل الدخول.","err");
+
+  async function verifySession() {
+    if (busy) return;
+    const token = getToken();
+
+    if (!token) {
+      showLogin();
       return;
     }
-    saveToken(result.session_token);
-    const verified=await verifySession();
-    if(!verified){
-      message("loginMsg","استلمت الواجهة نتيجة تسجيل الدخول، لكن لم ينجح التحقق من الجلسة. لا يمكن فتح لوحة الإدارة دون التحقق.","err");
+
+    setBusy(true);
+    $("sessionStatus").textContent = "جارٍ التحقق...";
+    try {
+      const result = await api("verify_session", { session_token: token });
+
+      if (result.ok) {
+        showDashboard(extractAdmin(result));
+        await checkHealth();
+      } else {
+        clearToken();
+        showLogin(result.message || result.error ||
+          "الجلسة غير صالحة. سجّل الدخول من جديد.");
+      }
+    } catch (error) {
+      $("sessionStatus").textContent = "تعذّر التحقق";
+      showMessage("dashboardMessage", error.message, "error");
+    } finally {
+      setBusy(false);
     }
-  }catch(e){
-    message("loginMsg",e.message,"err");
-  }finally{
-    busy=false;
-    $("loginBtn").disabled=false;
-    $("loginBtn").textContent="تسجيل الدخول";
   }
-});
-$("verifyBtn").addEventListener("click",verifySession);
-$("logoutBtn").addEventListener("click",async()=>{
-  if(busy)return;
-  busy=true;
-  $("logoutBtn").disabled=true;
-  try{
-    if(token()){
-      const result=await requestEngine({
-        action:"logout",
-        session_token:token()
-      });
-      if(!result||result.ok!==true){
-        message("adminMsg",result?.message||result?.error||"المحرك لم يؤكد تسجيل الخروج.","err");
+
+  $("loginForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    if (busy) return;
+
+    clearMessage("loginMessage");
+    const email = $("email").value.trim();
+    const password = $("password").value;
+
+    if (!email || !password) {
+      showMessage("loginMessage", "أدخل البريد الإلكتروني وكلمة المرور.", "error");
+      return;
+    }
+
+    setBusy(true);
+    try {
+      const result = await api("login", { email, password });
+
+      if (!result.ok) {
+        showMessage("loginMessage",
+          result.message || result.error || "فشل تسجيل الدخول.", "error");
         return;
       }
+
+      saveToken(result.session_token || result.data?.session_token);
+
+      const verification = await api("verify_session", {
+        session_token: getToken()
+      });
+
+      if (!verification.ok) {
+        clearToken();
+        showMessage("loginMessage",
+          verification.message || verification.error ||
+          "تم قبول الدخول لكن تعذّر التحقق من الجلسة.", "error");
+        return;
+      }
+
+      showDashboard(extractAdmin(verification).email
+        ? extractAdmin(verification)
+        : extractAdmin(result));
+
+      await checkHealth();
+    } catch (error) {
+      showMessage("loginMessage", error.message, "error");
+    } finally {
+      setBusy(false);
     }
-    sessionStorage.removeItem(TOKEN_KEY);
-    showLogin();
-    message("loginMsg","تم تسجيل الخروج.","ok");
-  }catch(e){
-    message("adminMsg","تعذّر تأكيد تسجيل الخروج: "+e.message,"err");
-  }finally{
-    if(!$("adminPanel").classList.contains("hidden")){
-      $("logoutBtn").disabled=false;
+  });
+
+  $("verifyBtn").addEventListener("click", verifySession);
+
+  $("logoutBtn").addEventListener("click", async () => {
+    if (busy) return;
+    const token = getToken();
+
+    setBusy(true);
+    try {
+      if (token) {
+        const result = await api("logout", { session_token: token });
+        if (!result.ok) {
+          showMessage("dashboardMessage",
+            result.message || result.error ||
+            "لم يؤكد المحرك تسجيل الخروج.", "error");
+          return;
+        }
+      }
+
+      clearToken();
+      showLogin("تم تسجيل الخروج.");
+    } catch (error) {
+      showMessage("dashboardMessage",
+        "تعذّر تأكيد تسجيل الخروج من المحرك؛ تم الاحتفاظ بحالة الجلسة حتى لا ندّعي نجاحًا غير مؤكد. " +
+        error.message, "error");
+    } finally {
+      setBusy(false);
     }
-    busy=false;
+  });
+
+  // لا نخزّن كلمة المرور، ولا نُرسلها إلا إلى المحرك عند تسجيل الدخول.
+  // عند فتح الصفحة، نتحقق من الجلسة الحالية إن وُجدت.
+  if (getToken()) {
+    $("loginView").classList.add("hidden");
+    $("dashboardView").classList.remove("hidden");
+    verifySession();
   }
-});
-window.addEventListener("pageshow",()=>{
-  if(token())verifySession();
-  else showLogin();
-});
+})();
 </script>
 </body>
 </html>
