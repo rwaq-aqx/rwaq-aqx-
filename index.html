@@ -42,8 +42,8 @@
     </div>
 
     <script>
-        // رابط النشر النهائي والمحدث لـ Google Apps Script
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzuyGUlVJEnLH9xfBQjcch02sXUkmWzBoH144fTIrlS4OerA9kap65Isue8VpOFY2e1/exec";
+        // رابط النشر الجديد والمحدث لـ Google Apps Script
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxwjWy9jnN0yurkmPz5CfmTOgDCzXBPxnK7wXNP6iA3Fr9S3swpoDHwPLZe0En0mD-w/exec";
 
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -64,7 +64,7 @@
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'text/plain;charset=utf-8' // لتجاوز قيود الـ CORS في المتصفحات
+                        'Content-Type': 'text/plain;charset=utf-8' // لتجاوز قيود الـ CORS
                     },
                     body: JSON.stringify({
                         action: 'login',
@@ -79,11 +79,10 @@
                     successDiv.textContent = 'تم تسجيل الدخول بنجاح! جاري التوجيه...';
                     successDiv.classList.remove('hidden');
                     
-                    // حفظ بيانات الجلسة محلياً في المتصفح
+                    // حفظ بيانات الجلسة محلياً
                     localStorage.setItem('aqx_session_token', data.session_token);
                     localStorage.setItem('aqx_admin_info', JSON.stringify(data.admin));
                     
-                    // التوجيه إلى صفحة التحكم بعد ثانية
                     setTimeout(() => {
                         window.location.href = 'dashboard.html'; 
                     }, 1000);
